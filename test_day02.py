@@ -14,7 +14,7 @@ class VirtualMachine:
         self.mem = None
 
     def load(self, program: List[int]):
-        self.mem = program[:]  # Shallow copy to avoid bugs.
+        self.mem = program[:]  # Deep copy to avoid bugs.
 
     def execute(self):
         pc = 0
