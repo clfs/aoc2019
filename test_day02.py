@@ -14,7 +14,7 @@ class VirtualMachine:
         self.mem = None
 
     def load(self, program: List[int]):
-        self.mem = program
+        self.mem = program[:]  # Shallow copy to avoid bugs.
 
     def execute(self):
         pc = 0
@@ -51,7 +51,7 @@ def find_desired_output(program: List[int],
     vm = VirtualMachine()
     for noun in range(max_noun + 1):
         for verb in range(max_verb + 1):
-            vm.load(program[:])  # Shallow copy!
+            vm.load(program)
             vm.write(1, noun)
             vm.write(2, verb)
             vm.execute()
