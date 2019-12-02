@@ -12,7 +12,13 @@ Format code.
 $ yapf -ri .
 ```
 
+Type check.
+```
+$ mypy .
+```
+
 # Dependencies
 Python 3.8+, with:
+- mypy (optional)
 - pytest
 - yapf (optional)
