@@ -1,4 +1,4 @@
-from typing import Iterator, List, Set
+from typing import Iterator, Set
 
 DIRECTIONS = {
     "R": 1,
@@ -8,17 +8,15 @@ DIRECTIONS = {
 }
 
 
-def to_moves(wire: str) -> List[complex]:
-    """Encode a wire as moves.
+def to_moves(wire: str) -> Iterator[complex]:
+    """Encode a wire as moves, and yield them.
 
-    For example, "D2,R1" becomes [-2j, 1].
+    For example, "D2,R1" yields -2j and 1.
     """
-    moves = []
     for token in wire.split(","):
         direction, distance = token[0], int(token[1:])  # str, int
-        m = distance * DIRECTIONS[direction]
-        moves.append(m)
-    return moves
+        move = distance * DIRECTIONS[direction]
+        yield move
 
 
 def walk(wire: str) -> Iterator[complex]:
@@ -34,7 +32,7 @@ def walk(wire: str) -> Iterator[complex]:
 
 
 def steps(move: complex) -> Iterator[complex]:
-    """Stroll along and yield a series of steps.
+    """Yield a series of steps in a move.
 
     For example, steps(3j) yields 1j, 1j, and 1j.
     """
