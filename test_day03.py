@@ -8,10 +8,6 @@ DIRECTIONS = {
 }
 
 
-def manhattan_dist(a: complex, b: complex) -> int:
-    return int(abs(a.real - b.real) + abs(a.imag - b.imag))
-
-
 def walk(wire: str) -> Iterator[complex]:
     """Walk a wire and yield each point visited, excluding the starting point.
 
@@ -27,7 +23,7 @@ def walk(wire: str) -> Iterator[complex]:
 
 def part_1(w1: str, w2: str) -> int:
     p1, p2 = set(walk(w1)), set(walk(w2))
-    heuristic = lambda p: manhattan_dist(0j, p)
+    heuristic = lambda p: abs(p.real) + abs(p.imag)
     return min(map(heuristic, p1 & p2))
 
 
