@@ -20,7 +20,7 @@ def walk(wire: str) -> Iterator[complex]:
     head = 0j  # Isn't yielded.
     for token in wire.split(","):
         direction, distance = token[0], int(token[1:])
-        for n in range(distance):
+        for _ in range(distance):
             head += DIRECTIONS[direction]
             yield head
 
