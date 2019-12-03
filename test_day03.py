@@ -1,4 +1,4 @@
-from typing import Iterator, Set
+from typing import Iterator
 
 DIRECTIONS = {
     "R": 1,
@@ -8,61 +8,34 @@ DIRECTIONS = {
 }
 
 
-def to_moves(wire: str) -> Iterator[complex]:
-    """Encode a wire as moves, and yield them.
-
-    For example, to_moves("D2,R1") yields -2j and 1.
-    """
-    for token in wire.split(","):
-        direction, distance = token[0], int(token[1:])  # str, int
-        move = distance * DIRECTIONS[direction]
-        yield move
-
-
-def to_steps(move: complex) -> Iterator[complex]:
-    """Yield a series of steps in a move.
-
-    For example, steps(3j) yields 1j, 1j, and 1j.
-    """
-    magnitude = int(abs(move))
-    step = move / magnitude
-    for _ in range(magnitude):
-        yield step
+def manhattan_dist(a: complex, b: complex) -> int:
+    return int(abs(a.real - b.real) + abs(a.imag - b.imag))
 
 
 def walk(wire: str) -> Iterator[complex]:
     """Walk a wire and yield each point visited, excluding the starting point.
 
-    For example, walk("D2,R1") yields -1j, -2j, and -2j+1.
+    For example, walk("D2,R1") yields -1j, -2j and 1-2j.
     """
-    head = 0 + 0j  # Isn't yielded.
-    for move in to_moves(wire):
-        for step in to_steps(move):
-            head += step
+    head = 0j  # Isn't yielded.
+    for token in wire.split(","):
+        direction, distance = token[0], int(token[1:])
+        for n in range(distance):
+            head += DIRECTIONS[direction]
             yield head
 
 
-def intersections(w1: str, w2: str) -> Set[complex]:
-    """Return the set of points at which two wires intersect."""
-    return set(walk(w1)).intersection(walk(w2))
-
-
-def manhattan_dist(a: complex, b: complex) -> int:
-    return int(abs(a.real - b.real) + abs(a.imag - b.imag))
-
-
 def part_1(w1: str, w2: str) -> int:
-    """Return the Manhattan distance to the most central intersection."""
-    heuristic = lambda p: manhattan_dist(0 + 0j, p)
-    return min(map(heuristic, intersections(w1, w2)))
+    p1, p2 = set(walk(w1)), set(walk(w2))
+    heuristic = lambda p: manhattan_dist(0j, p)
+    return min(map(heuristic, p1 & p2))
 
 
 def part_2(w1: str, w2: str) -> int:
-    p1 = list(walk(w1))
-    p2 = list(walk(w2))
+    p1, p2 = list(walk(w1)), list(walk(w2))
     # Add 2, since .index() starts at 0.
     heuristic = lambda p: p1.index(p) + p2.index(p) + 2
-    return min(map(heuristic, intersections(w1, w2)))
+    return min(map(heuristic, set(p1).intersection(p2)))
 
 
 def test_cases_part_1():
