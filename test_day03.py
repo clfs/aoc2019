@@ -11,7 +11,7 @@ DIRECTIONS = {
 def to_moves(wire: str) -> Iterator[complex]:
     """Encode a wire as moves, and yield them.
 
-    For example, "D2,R1" yields -2j and 1.
+    For example, to_moves("D2,R1") yields -2j and 1.
     """
     for token in wire.split(","):
         direction, distance = token[0], int(token[1:])  # str, int
@@ -22,16 +22,16 @@ def to_moves(wire: str) -> Iterator[complex]:
 def walk(wire: str) -> Iterator[complex]:
     """Walk a wire and yield each point visited, excluding the starting point.
 
-    For example, "D2,R1" yields -1j, -2j, and -2j+1.
+    For example, walk("D2,R1") yields -1j, -2j, and -2j+1.
     """
     head = 0 + 0j  # Isn't yielded.
     for move in to_moves(wire):
-        for step in steps(move):
+        for step in to_steps(move):
             head += step
             yield head
 
 
-def steps(move: complex) -> Iterator[complex]:
+def to_steps(move: complex) -> Iterator[complex]:
     """Yield a series of steps in a move.
 
     For example, steps(3j) yields 1j, 1j, and 1j.
