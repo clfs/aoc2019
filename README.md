@@ -7,19 +7,15 @@ Run all solutions.
 $ pytest
 ```
 
-Format code.
+Type, format, and lint check.
 ```
-$ yapf -ri .
-```
-
-Type check.
-```
-$ mypy .
+$ ./check.sh
 ```
 
 # Dependencies
 Python 3.8+, with:
 - mypy (optional)
 - numpy
+- pylint (optional)
 - pytest
 - yapf (optional)
