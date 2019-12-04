@@ -1,63 +1,54 @@
-from typing import Callable, Iterable
-
-import numpy as np  # type: ignore
-
-
-def increases(n: int) -> bool:
-    """Going from left to right, the digits never decrease."""
-    s = str(n)
+def is_sorted(s: str) -> bool:
+    """Is s a sorted string?"""
     return list(s) == sorted(s)
 
 
-def repeats(n: int) -> bool:
-    """Two adjacent digits are the same."""
-    s = str(n)
-    return any(x == y for x, y in zip(s, s[1:]))
+def is_group_in_sorted(s: str) -> bool:
+    """Assuming s is sorted, is there a repeated character?"""
+    return any(x >= 2 for x in map(s.count, s))
 
 
-def repeats_careful(n: int) -> bool:
-    """Has two adjacent matching digits which aren't part of a larger group."""
-    digits = list(map(int, list(str(n))))
-    return any(np.bincount(digits) == 2)
+def is_pair_in_sorted(s: str) -> bool:
+    """Assuming s is sorted, is a there a character repeated only twice?"""
+    return any(x == 2 for x in map(s.count, s))
 
 
-def sweep(it: Iterable[int], *filters: Callable[[int], bool]) -> Iterable[int]:
-    # For speed, put faster or less frequently passing filters first!
-    for f in filters:
-        it = filter(f, it)
-    return it
+def check_1(password: str) -> bool:
+    return is_sorted(password) and is_group_in_sorted(password)
+
+
+def check_2(password: str) -> bool:
+    return is_sorted(password) and is_pair_in_sorted(password)
 
 
 def part_1(lo: int, hi: int) -> int:
-    r = range(lo, hi + 1)
-    return len(list(sweep(r, increases, repeats)))
+    passwords = map(str, range(lo, hi + 1))
+    return sum(check_1(p) for p in passwords)
 
 
 def part_2(lo: int, hi: int) -> int:
-    r = range(lo, hi + 1)
-    # All Part 2 passwords are also Part 1 passwords, so using three filters is
-    # a little faster than just two.
-    return len(list(sweep(r, increases, repeats, repeats_careful)))
+    passwords = map(str, range(lo, hi + 1))
+    return sum(check_2(p) for p in passwords)
 
 
 def test_cases_part_1() -> None:
     cases = [
-        (111111, True),
-        (223450, False),
-        (123789, False),
+        ("111111", True),
+        ("223450", False),
+        ("123789", False),
     ]
     for x, y in cases:
-        assert (increases(x) and repeats(x)) == y
+        assert check_1(x) == y
 
 
 def test_cases_part_2() -> None:
     cases = [
-        (112233, True),
-        (123444, False),
-        (111122, True),
+        ("112233", True),
+        ("123444", False),
+        ("111122", True),
     ]
     for x, y in cases:
-        assert (increases(x) and repeats_careful(x)) == y
+        assert check_2(x) == y
 
 
 def test_solutions() -> None:
