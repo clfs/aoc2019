@@ -15,7 +15,6 @@ $ ./check.sh
 # Dependencies
 Python 3.8+, with:
 - mypy (optional)
-- numpy
 - pylint (optional)
 - pytest
 - yapf (optional)
