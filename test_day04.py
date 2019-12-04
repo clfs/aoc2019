@@ -1,6 +1,12 @@
-from typing import Callable
+from typing import Callable, Iterable
 
 import numpy as np  # type: ignore
+
+
+def increases(n: int) -> bool:
+    """Going from left to right, the digits never decrease."""
+    s = str(n)
+    return list(s) == sorted(s)
 
 
 def repeats(n: int) -> bool:
@@ -15,28 +21,23 @@ def repeats_careful(n: int) -> bool:
     return any(np.bincount(digits) == 2)
 
 
-def increases(n: int) -> bool:
-    """Going from left to right, the digits never decrease."""
-    s = str(n)
-    return list(s) == sorted(s)
-
-
-def match_all(n: int, *predicates: Callable[[int], bool]) -> bool:
-    # For speed, put faster or more restrictive filters first!
-    return all(p(n) for p in predicates)
+def sweep(it: Iterable[int], *filters: Callable[[int], bool]) -> Iterable[int]:
+    # For speed, put faster or less frequently passing filters first!
+    for f in filters:
+        it = filter(f, it)
+    return it
 
 
 def part_1(lo: int, hi: int) -> int:
     r = range(lo, hi + 1)
-    return sum(match_all(n, increases, repeats) for n in r)
+    return len(list(sweep(r, increases, repeats)))
 
 
 def part_2(lo: int, hi: int) -> int:
     r = range(lo, hi + 1)
-    # All Part 2 passwords are also Part 1 passwords, so we can use all three
-    # filters. This is actually faster, since the most expensive filter
-    # (repeats_careful) isn't run as often.
-    return sum(match_all(n, increases, repeats, repeats_careful) for n in r)
+    # All Part 2 passwords are also Part 1 passwords, so using three filters is
+    # a little faster than just two.
+    return len(list(sweep(r, increases, repeats, repeats_careful)))
 
 
 def test_cases_part_1():
@@ -46,7 +47,7 @@ def test_cases_part_1():
         (123789, False),
     ]
     for x, y in cases:
-        assert match_all(x, increases, repeats) == y
+        assert (increases(x) and repeats(x)) == y
 
 
 def test_cases_part_2():
@@ -56,7 +57,7 @@ def test_cases_part_2():
         (111122, True),
     ]
     for x, y in cases:
-        assert match_all(x, increases, repeats, repeats_careful) == y
+        assert (increases(x) and repeats_careful(x)) == y
 
 
 def test_solutions():
