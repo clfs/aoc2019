@@ -1,6 +1,6 @@
 from typing import Callable
 
-import numpy as np
+import numpy as np  # type: ignore
 
 
 def repeats(n: int) -> bool:
@@ -59,11 +59,7 @@ def test_cases_part_2():
         assert match_all(x, increases, repeats, repeats_careful) == y
 
 
-def test_solution_part_1():
+def test_solutions():
     lo, hi = 246540, 787419
     assert part_1(lo, hi) == 1063
-
-
-def test_solution_part_2():
-    lo, hi = 246540, 787419
     assert part_2(lo, hi) == 686

@@ -68,15 +68,9 @@ def test_cases_part_2():
         assert part_2(x, y) == z
 
 
-def test_solution_part_1():
+def test_solutions():
     with open("input/03.txt") as f:
         w1, w2 = [line.strip() for line in f]
 
     assert part_1(w1, w2) == 1264
-
-
-def test_solution_part_2():
-    with open("input/03.txt") as f:
-        w1, w2 = [line.strip() for line in f]
-
     assert part_2(w1, w2) == 37390
