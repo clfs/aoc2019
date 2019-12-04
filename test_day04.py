@@ -23,7 +23,8 @@ def repeats_careful(n: int) -> bool:
 
 def increases(n: int) -> bool:
     """Going from left to right, the digits never decrease."""
-    return int(''.join(sorted(str(n)))) == n
+    s = str(n)
+    return list(s) == sorted(s)
 
 
 def match_all(n: int, *predicates: Callable[[int], bool]) -> bool:
@@ -38,7 +39,10 @@ def part_1(lo: int, hi: int) -> int:
 
 def part_2(lo: int, hi: int) -> int:
     r = range(lo, hi + 1)
-    return sum(match_all(n, increases, repeats_careful) for n in r)
+    # All Part 2 passwords are also Part 1 passwords, so we can use all three
+    # filters. This is actually faster, since the most expensive filter
+    # (repeats_careful) isn't run as often.
+    return sum(match_all(n, increases, repeats, repeats_careful) for n in r)
 
 
 def test_cases_part_1():
