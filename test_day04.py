@@ -27,17 +27,18 @@ def increases(n: int) -> bool:
 
 
 def match_all(n: int, *predicates: Callable[[int], bool]) -> bool:
+    # For speed, put faster or more restrictive filters first!
     return all(p(n) for p in predicates)
 
 
 def part_1(lo: int, hi: int) -> int:
     r = range(lo, hi + 1)
-    return sum(match_all(n, repeats, increases) for n in r)
+    return sum(match_all(n, increases, repeats) for n in r)
 
 
 def part_2(lo: int, hi: int) -> int:
     r = range(lo, hi + 1)
-    return sum(match_all(n, repeats_careful, increases) for n in r)
+    return sum(match_all(n, increases, repeats_careful) for n in r)
 
 
 def test_cases_part_1():
@@ -47,7 +48,7 @@ def test_cases_part_1():
         (123789, False),
     ]
     for x, y in cases:
-        assert match_all(x, repeats, increases) == y
+        assert match_all(x, increases, repeats) == y
 
 
 def test_cases_part_2():
@@ -57,7 +58,7 @@ def test_cases_part_2():
         (111122, True),
     ]
     for x, y in cases:
-        assert match_all(x, repeats_careful, increases) == y
+        assert match_all(x, increases, repeats_careful) == y
 
 
 def test_solution_part_1():
