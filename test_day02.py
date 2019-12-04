@@ -11,7 +11,7 @@ class Op(enum.IntEnum):
 class VirtualMachine:
     # NOTE: The memory size is mutable, and set as large as the loaded program.
     def __init__(self) -> None:
-        self.mem = None
+        self.mem: List[int] = []
 
     def load(self, program: List[int]) -> None:
         self.mem = program[:]  # Deep copy to avoid bugs.

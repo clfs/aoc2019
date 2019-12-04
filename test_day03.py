@@ -23,14 +23,20 @@ def walk(wire: str) -> Iterator[complex]:
 
 def part_1(w1: str, w2: str) -> int:
     p1, p2 = set(walk(w1)), set(walk(w2))
-    heuristic = lambda p: abs(p.real) + abs(p.imag)
-    return min(map(heuristic, p1 & p2))
+
+    def heuristic(p: complex) -> int:
+        return int(abs(p.real) + abs(p.imag))
+
+    return min(map(heuristic, p1.intersection(p2)))
 
 
 def part_2(w1: str, w2: str) -> int:
     p1, p2 = list(walk(w1)), list(walk(w2))
-    # Add 2, since .index() starts at 0.
-    heuristic = lambda p: p1.index(p) + p2.index(p) + 2
+
+    def heuristic(p: complex) -> int:
+        # Add 2, since .index() starts at 0.
+        return p1.index(p) + p2.index(p) + 2
+
     return min(map(heuristic, set(p1).intersection(p2)))
 
 
