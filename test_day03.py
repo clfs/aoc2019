@@ -34,7 +34,7 @@ def part_2(w1: str, w2: str) -> int:
     return min(map(heuristic, set(p1).intersection(p2)))
 
 
-def test_cases_part_1():
+def test_cases_part_1() -> None:
     cases = [
         (
             "R75,D30,R83,U83,L12,D49,R71,U7,L72",
@@ -51,7 +51,7 @@ def test_cases_part_1():
         assert part_1(x, y) == z
 
 
-def test_cases_part_2():
+def test_cases_part_2() -> None:
     cases = [
         (
             "R75,D30,R83,U83,L12,D49,R71,U7,L72",
@@ -68,7 +68,7 @@ def test_cases_part_2():
         assert part_2(x, y) == z
 
 
-def test_solutions():
+def test_solutions() -> None:
     with open("input/03.txt") as f:
         w1, w2 = [line.strip() for line in f]
 

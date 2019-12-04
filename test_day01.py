@@ -10,7 +10,7 @@ def fuel_required_accurate(module: int) -> int:
     return fuel
 
 
-def test_fuel_required():
+def test_fuel_required() -> None:
     cases = [
         (12, 2),
         (14, 2),
@@ -21,7 +21,7 @@ def test_fuel_required():
         assert fuel_required(x) == y
 
 
-def test_fuel_required_accurate():
+def test_fuel_required_accurate() -> None:
     cases = [
         (14, 2),
         (1969, 966),
@@ -31,7 +31,7 @@ def test_fuel_required_accurate():
         assert fuel_required_accurate(x) == y
 
 
-def test_solution_part_1():
+def test_solution_part_1() -> None:
     with open("input/01.txt") as f:
         modules = [int(line) for line in f]
 
@@ -39,7 +39,7 @@ def test_solution_part_1():
     assert answer == 3375962
 
 
-def test_solution_part_2():
+def test_solution_part_2() -> None:
     with open("input/01.txt") as f:
         modules = [int(line) for line in f]
 

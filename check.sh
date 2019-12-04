@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "==> mypy <=="
-mypy .
+mypy --strict .
 echo "==> yapf <=="
 yapf --recursive --diff .
 echo "==> pylint <=="

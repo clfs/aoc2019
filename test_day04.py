@@ -40,7 +40,7 @@ def part_2(lo: int, hi: int) -> int:
     return len(list(sweep(r, increases, repeats, repeats_careful)))
 
 
-def test_cases_part_1():
+def test_cases_part_1() -> None:
     cases = [
         (111111, True),
         (223450, False),
@@ -50,7 +50,7 @@ def test_cases_part_1():
         assert (increases(x) and repeats(x)) == y
 
 
-def test_cases_part_2():
+def test_cases_part_2() -> None:
     cases = [
         (112233, True),
         (123444, False),
@@ -60,7 +60,7 @@ def test_cases_part_2():
         assert (increases(x) and repeats_careful(x)) == y
 
 
-def test_solutions():
+def test_solutions() -> None:
     lo, hi = 246540, 787419
     assert part_1(lo, hi) == 1063
     assert part_2(lo, hi) == 686

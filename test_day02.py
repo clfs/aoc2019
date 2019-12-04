@@ -10,13 +10,13 @@ class Op(enum.IntEnum):
 
 class VirtualMachine:
     # NOTE: The memory size is mutable, and set as large as the loaded program.
-    def __init__(self):
+    def __init__(self) -> None:
         self.mem = None
 
-    def load(self, program: List[int]):
+    def load(self, program: List[int]) -> None:
         self.mem = program[:]  # Deep copy to avoid bugs.
 
-    def execute(self):
+    def execute(self) -> None:
         pc = 0
         while True:
             op = self.mem[pc]
@@ -37,7 +37,7 @@ class VirtualMachine:
     def read(self, location: int) -> int:
         return self.mem[location]
 
-    def write(self, location: int, value: int):
+    def write(self, location: int, value: int) -> None:
         self.mem[location] = value
 
     def dump(self) -> List[int]:
@@ -60,7 +60,7 @@ def find_desired_output(program: List[int],
     raise RuntimeError("desired output could not be found")
 
 
-def test_cases():
+def test_cases() -> None:
     cases = [
         ([1, 0, 0, 0, 99], [2, 0, 0, 0, 99]),
         ([2, 3, 0, 3, 99], [2, 3, 0, 6, 99]),
@@ -74,7 +74,7 @@ def test_cases():
         assert vm.dump() == y
 
 
-def test_solution_part_1():
+def test_solution_part_1() -> None:
     with open("input/02.txt") as f:
         program = [int(n) for n in f.read().split(",")]
 
@@ -86,7 +86,7 @@ def test_solution_part_1():
     assert vm.read(0) == 5866714
 
 
-def test_solution_part_2():
+def test_solution_part_2() -> None:
     with open("input/02.txt") as f:
         program = [int(n) for n in f.read().split(",")]
 
