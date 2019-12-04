@@ -20,5 +20,6 @@ $ mypy .
 # Dependencies
 Python 3.8+, with:
 - mypy (optional)
+- numpy
 - pytest
 - yapf (optional)

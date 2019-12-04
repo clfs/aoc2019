@@ -1,5 +1,7 @@
 from typing import Callable
 
+import numpy as np
+
 
 def repeats(n: int) -> bool:
     """Two adjacent digits are the same."""
@@ -9,16 +11,8 @@ def repeats(n: int) -> bool:
 
 def repeats_careful(n: int) -> bool:
     """Has two adjacent matching digits which aren't part of a larger group."""
-    s = str(n)
-    saved, count = s[0], 1
-    for c in s[1:]:
-        if c == saved:
-            count += 1
-        else:
-            if count == 2:
-                return True
-            saved, count = c, 1
-    return count == 2
+    digits = list(map(int, list(str(n))))
+    return any(np.bincount(digits) == 2)
 
 
 def increases(n: int) -> bool:
@@ -62,7 +56,7 @@ def test_cases_part_2():
         (111122, True),
     ]
     for x, y in cases:
-        assert match_all(x, increases, repeats_careful) == y
+        assert match_all(x, increases, repeats, repeats_careful) == y
 
 
 def test_solution_part_1():
