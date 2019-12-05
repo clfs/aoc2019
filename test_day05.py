@@ -97,16 +97,17 @@ class VirtualMachine:
 
 
 def test_input_is_output() -> None:
+    """Does this program output its own input?"""
     program = [3, 0, 4, 0, 99]
     program_input = 1337  # Arbitrary.
 
     vm = VirtualMachine()
     vm.load(program, program_input)
-    for output in vm.execute():
-        assert output == program_input
+    assert next(vm.execute()) == program_input
 
 
 def test_params_parsing() -> None:
+    """Are the first arg's parameter modes parsed correctly?"""
     program = [1002, 4, 3, 4, 33]
     program_input = 420  # Unused.
 
@@ -117,6 +118,48 @@ def test_params_parsing() -> None:
     want = [1002, 4, 3, 4, 99]
     got = vm.memory_dump()
     assert want == got
+
+
+def test_input_comparisons() -> None:
+    """Do these programs correctly compare inputs against values?"""
+    cases = [
+        (
+            # Using position mode, is the input equal to 8?
+            [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8],
+            [(-1, 0), (0, 0), (8, 1), (9, 0)],
+        ),
+        (
+            # Using position mode, is the input less than 8?
+            [3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8],
+            [(-1, 1), (0, 1), (8, 0), (9, 0)],
+        ),
+        (
+            # Using immediate mode, is the input equal to 8?
+            [3, 3, 1108, -1, 8, 3, 4, 3, 99],
+            [(-1, 0), (0, 0), (8, 1), (9, 0)],
+        ),
+        (
+            # Using immediate mode, is the input less than 8?
+            [3, 3, 1107, -1, 8, 3, 4, 3, 99],
+            [(-1, 1), (0, 1), (8, 0), (9, 0)],
+        ),
+        (
+            # If less than 8, 999; if 8, 1000; if greater than 8, 1001.
+            [
+                3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20,
+                31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1,
+                46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1,
+                46, 98, 99
+            ],
+            [(-1, 999), (0, 999), (8, 1000), (9, 1001)],
+        ),
+    ]
+
+    vm = VirtualMachine()
+    for program, pairs in cases:
+        for x, y in pairs:
+            vm.load(program, x)
+            assert next(vm.execute()) == y
 
 
 def test_solution_part_1() -> None:
