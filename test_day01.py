@@ -1,12 +1,12 @@
-def fuel_required(module: int) -> int:
-    return module // 3 - 2
+def fuel_required(weight: int) -> int:
+    return weight // 3 - 2
 
 
-def fuel_required_accurate(module: int) -> int:
-    fuel, n = 0, module
-    while n > 0:
-        n = max(0, n // 3 - 2)
-        fuel += n
+def fuel_required_accurate(weight: int) -> int:
+    fuel = 0
+    while weight > 0:
+        weight = max(0, weight // 3 - 2)
+        fuel += weight
     return fuel
 
 
