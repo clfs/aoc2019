@@ -11,22 +11,13 @@ def fuel_required_accurate(weight: int) -> int:
 
 
 def test_fuel_required() -> None:
-    cases = [
-        (12, 2),
-        (14, 2),
-        (1969, 654),
-        (100756, 33583),
-    ]
+    cases = [(12, 2), (14, 2), (1969, 654), (100756, 33583)]
     for x, y in cases:
         assert fuel_required(x) == y
 
 
 def test_fuel_required_accurate() -> None:
-    cases = [
-        (14, 2),
-        (1969, 966),
-        (100756, 50346),
-    ]
+    cases = [(14, 2), (1969, 966), (100756, 50346)]
     for x, y in cases:
         assert fuel_required_accurate(x) == y
 
