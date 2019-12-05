@@ -56,11 +56,9 @@ class VirtualMachine:
             elif op == Op.OUT:
                 yield vals[0]
             elif op == Op.JIT:
-                if vals[0]:
-                    self.pc = vals[1]
+                self.pc = vals[1] if vals[0] else self.pc
             elif op == Op.JIF:
-                if not vals[0]:
-                    self.pc = vals[1]
+                self.pc = vals[1] if not vals[0] else self.pc
             elif op == Op.LTH:
                 self.mem[locs[2]] = int(vals[0] < vals[1])
             elif op == Op.EQL:
