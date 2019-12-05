@@ -31,17 +31,11 @@ def test_fuel_required_accurate() -> None:
         assert fuel_required_accurate(x) == y
 
 
-def test_solution_part_1() -> None:
+def test_solutions() -> None:
     with open("input/01.txt") as f:
         modules = [int(line) for line in f]
 
-    answer = sum(map(fuel_required, modules))
-    assert answer == 3375962
-
-
-def test_solution_part_2() -> None:
-    with open("input/01.txt") as f:
-        modules = [int(line) for line in f]
-
-    answer = sum(map(fuel_required_accurate, modules))
-    assert answer == 5061072
+    part_1 = sum(map(fuel_required, modules))
+    part_2 = sum(map(fuel_required_accurate, modules))
+    assert part_1 == 3375962
+    assert part_2 == 5061072
