@@ -145,7 +145,6 @@ def part_1(program: List[int]) -> int:
 def part_2(program: List[int]) -> int:
     best_signal = 0
     for permutation in itertools.permutations(range(5, 10)):
-        print(f"=== PERMUTATION {permutation} ===")
         # Create enough VMs.
         vms = [VirtualMachine() for _ in range(len(permutation))]
         # Have each VM load the program.
@@ -162,7 +161,6 @@ def part_2(program: List[int]) -> int:
         # Execute all VMs.
         vms = simulate(vms)
         # Get the output from the last VM, and see if it's any better.
-        print(*vms, sep='\n')
         signal = vms[-1].pop_output()
         best_signal = max(best_signal, signal)
     return best_signal
