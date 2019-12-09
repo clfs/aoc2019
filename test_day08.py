@@ -1,92 +1,67 @@
 import enum
-from typing import List
+from typing import Any, List
+
 
 class Color(enum.IntEnum):
     BLACK = 0
     WHITE = 1
-    TRANS = 2
-
-def add(top: int, bot: int) -> int:
-    if top == bot:
-        return top
-    if top == 2:
-        return bot
-    if top == 1:
-        return 1
-    if top == 0:
-        return 0
-"""
-def add(top: Color, bot: Color) -> Color:
-    if top == bot:
-        return top
-    if top == Color.BLACK and bot == Color.WHITE:
-        return Color.BLACK
-    if top == Color.BLACK and bot == Color.TRANS:
-        return Color.BLACK
-    if top == Color.WHITE and bot == Color.BLACK:
-        return Color.WHITE
-    if top == Color.WHITE and bot == Color.TRANS:
-        return Color.WHITE
-    if top == Color.TRANS and bot == Color.BLACK:
-        return Color.BLACK
-    if top == Color.TRANS and bot == Color.WHITE:
-        return Color.White
-    raise RuntimeError("bad addition")
-"""
-def zero_count(s) -> int:
-    return s.count(0)
-
-def blocks(s, w) -> List[str]:
-    b = [s[i:i+w] for i in range(0, len(s), w)]
-    return b
-
-def print_picture(s, w, h):
-    b = blocks(s, w*h)
-    ov = overlay(b)
-    a = blocks(ov, w)
-    print("")
-    for j in a:
-        print(j)
-
-def part_1(data, w, h) -> int:
-    window_size = w * h
-    b = blocks(data, window_size)
-    magic = min(b, key=zero_count)
-    return magic.count(1) * magic.count(2)
-
-def overlay(x: List[List[str]]) -> str:
-    ret = x[0]
-    for layer in x[1:]:
-        ret = add_layer(ret, layer)
-    return ret
-
-def add_layer(a: str, b: str) -> str:
-    c = []
-    for x, y in zip(a, b):
-        c.append(add(int(x), int(y)))
-    return ''.join(map(str, c))
-
-def part_2(data, w, h) -> int:
-    window_size = w * h
-    b = blocks(data, window_size)
-    pic = overlay(b)
-    print_picture(pic, w, h)
+    CLEAR = 2
 
 
-def test_cases_part_1() -> None:
-    data = "123456789012"
-    window_size = 2*3
-    blocks = [data[i : i + window_size] for i in range(0, len(data), window_size)]
+def is_colored(pixel: int) -> bool:
+    return pixel != Color.CLEAR
+
+
+def blocks(x: Any, n: int) -> List[Any]:
+    return [x[i:i + n] for i in range(0, len(x), n)]
+
+
+def shrink(mound: Any) -> int:
+    # Type-checking this one is pretty difficult :(
+    return int(next(filter(is_colored, mound), Color.CLEAR))
+
+
+def collapse(layers: List[List[int]]) -> List[int]:
+    return [shrink(mound) for mound in zip(*layers)]
+
+
+def show(view: List[int], w: int) -> str:
+    s = "".join(map(str, view))
+    return "\n".join(blocks(s, w))
+
+
+def part_1(digits: List[int], w: int, h: int) -> int:
+    layers = blocks(digits, w * h)
+
+    def heuristic(layer: List[int]) -> int:
+        return layer.count(0)
+
+    layer = min(layers, key=heuristic)
+    # Unnecessary int() to please the type checker.
+    return int(layer.count(1) * layer.count(2))
+
+
+def part_2(digits: List[int], w: int, h: int) -> str:
+    layers = blocks(digits, w * h)
+    return show(collapse(layers), w)
+
 
 def test_cases_part_2() -> None:
-    data = "0222112222120000"
-    w, h = 2, 2
-    part_2(data, w, h)
+    digits, w, h = [0, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0], 2, 2
+    answer = "01\n10"
 
-def test_solutions():
+    assert part_2(digits, w, h) == answer
+
+
+def test_solutions() -> None:
     with open("input/08.txt") as f:
-        data = [int(c) for c in f.read() if c.isdigit()]
+        digits = [int(c) for c in f.read().strip()]
     w, h = 25, 6
 
-    assert part_1(data, w, h) == 2016
-    assert part_2(data, w, h) == None
+    assert part_1(digits, w, h) == 2016
+    assert part_2(digits, w, h) == ("1001011110011001111010010\n"
+                                    "1001000010100100001010010\n"
+                                    "1111000100100000010010010\n"
+                                    "1001001000100000100010010\n"
+                                    "1001010000100101000010010\n"
+                                    "1001011110011001111001100")  # HZCZU
